@@ -1,0 +1,5975 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./Ch21-ClassLoaders_and_J2EE_files/filelist.xml">
+<link rel=Edit-Time-Data href="./Ch21-ClassLoaders_and_J2EE_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>Chapter 21 - ClassLoaders and J2EE</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Preferred Customer</o:Author>
+  <o:LastAuthor>Srikanth Krishna Shenoy</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>9031</o:TotalTime>
+  <o:LastPrinted>2003-12-04T04:21:00Z</o:LastPrinted>
+  <o:Created>2005-03-19T04:58:00Z</o:Created>
+  <o:LastSaved>2005-03-19T04:58:00Z</o:LastSaved>
+  <o:Pages>13</o:Pages>
+  <o:Words>3139</o:Words>
+  <o:Characters>17894</o:Characters>
+  <o:Bytes>33910</o:Bytes>
+  <o:Lines>149</o:Lines>
+  <o:Paragraphs>35</o:Paragraphs>
+  <o:CharactersWithSpaces>21975</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:HideSpellingErrors/>
+  <w:HideGrammaticalErrors/>
+  <w:DoNotHyphenateCaps/>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:DoNotShadeFormData/>
+  <w:Compatibility>
+   <w:UsePrinterMetrics/>
+   <w:WW6BorderRules/>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+  </w:Compatibility>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Courier;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Courier New";
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:AGaramond;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:553679495 -2147483648 8 0 66047 0;}
+@font-face
+	{font-family:"Arial Black";
+	panose-1:2 11 10 4 2 1 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 5 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:"AGaramond Bold";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:"Univers 45 Light";
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-format:other;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:JansonText-Roman;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:0;
+	mso-generic-font-family:auto;
+	mso-font-format:other;
+	mso-font-pitch:auto;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Courier-Oblique;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-format:other;
+	mso-font-pitch:auto;
+	mso-font-signature:3 0 0 0 1 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	mso-font-kerning:14.0pt;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	color:black;
+	font-weight:bold;
+	font-style:italic;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:.5in;
+	text-indent:-.5in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	mso-list:l23 level3 lfo15;
+	tab-stops:list .5in;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:normal;}
+h4
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:.6in;
+	text-indent:-.6in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:4;
+	mso-list:l23 level4 lfo15;
+	tab-stops:list .6in;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+h5
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:.7in;
+	text-indent:-.7in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:5;
+	mso-list:l23 level5 lfo15;
+	tab-stops:list .7in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	color:black;
+	font-weight:normal;}
+h6
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:.8in;
+	text-indent:-.8in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:6;
+	mso-list:l23 level6 lfo15;
+	tab-stops:list .8in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	color:black;
+	font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:.9in;
+	text-indent:-.9in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:7;
+	mso-list:l23 level7 lfo15;
+	tab-stops:list .9in;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.MsoHeading8, li.MsoHeading8, div.MsoHeading8
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:1.0in;
+	text-indent:-1.0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:8;
+	mso-list:l23 level8 lfo15;
+	tab-stops:list 1.0in;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.MsoHeading9, li.MsoHeading9, div.MsoHeading9
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:1.1in;
+	text-indent:-1.1in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:9;
+	mso-list:l23 level9 lfo15;
+	tab-stops:list 1.1in;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.MsoIndex1, li.MsoIndex1, div.MsoIndex1
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:10.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex2, li.MsoIndex2, div.MsoIndex2
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:20.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex3, li.MsoIndex3, div.MsoIndex3
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:30.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex4, li.MsoIndex4, div.MsoIndex4
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:40.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex5, li.MsoIndex5, div.MsoIndex5
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:50.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex6, li.MsoIndex6, div.MsoIndex6
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:60.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex7, li.MsoIndex7, div.MsoIndex7
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:70.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex8, li.MsoIndex8, div.MsoIndex8
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:80.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndex9, li.MsoIndex9, div.MsoIndex9
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:1.25in;
+	margin-bottom:.0001pt;
+	text-indent:-10.0pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:right dotted 359.5pt;
+	font-size:10.0pt;
+	mso-bidi-font-size:36.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:10.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:20.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:30.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:40.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:50.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:60.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:70.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{mso-style-update:auto;
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:80.0pt;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.0in right 6.0in;
+	font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.MsoIndexHeading, li.MsoIndexHeading, div.MsoIndexHeading
+	{mso-style-next:"Index 1";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{mso-style-next:Normal;
+	margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;}
+p.MsoListBullet, li.MsoListBullet, div.MsoListBullet
+	{mso-style-update:auto;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.25in;
+	margin-bottom:.0001pt;
+	text-indent:-.25in;
+	mso-pagination:widow-orphan;
+	mso-list:l9 level1 lfo52;
+	tab-stops:list .25in;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoBodyText2, li.MsoBodyText2, div.MsoBodyText2
+	{margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	mso-layout-grid-align:none;
+	text-autospace:none;
+	font-size:8.0pt;
+	font-family:JansonText-Roman;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;}
+p.MsoBodyText3, li.MsoBodyText3, div.MsoBodyText3
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-layout-grid-align:none;
+	text-autospace:none;
+	font-size:8.0pt;
+	font-family:JansonText-Roman;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+strong
+	{mso-bidi-font-weight:normal;}
+p.MsoDocumentMap, li.MsoDocumentMap, div.MsoDocumentMap
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	background:navy;
+	font-size:10.0pt;
+	font-family:Tahoma;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p
+	{margin-right:0in;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+code
+	{mso-ansi-font-size:11.0pt;
+	mso-bidi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:Courier;
+	mso-bidi-font-family:"Courier New";}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	tab-stops:45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+tt
+	{mso-ansi-font-size:9.0pt;
+	mso-bidi-font-size:9.0pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:#354278;}
+p.body, li.body, div.body
+	{mso-style-name:"\.body";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.bullet, li.bullet, div.bullet
+	{mso-style-name:"\.bullet";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:.5in;
+	text-align:justify;
+	text-indent:-.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	mso-list:l66 level1 lfo3;
+	tab-stops:.35in .5in list 40.5pt;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.cellbody, li.cellbody, div.cellbody
+	{mso-style-name:"\.cell body";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-pagination:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Univers 45 Light";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.cellhead, li.cellhead, div.cellhead
+	{mso-style-name:"\.cell head";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-pagination:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Univers 45 Light";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.ch, li.ch, div.ch
+	{mso-style-name:"\.ch";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:60.0pt;
+	line-height:24.0pt;
+	mso-pagination:none;
+	font-size:24.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	letter-spacing:1.0pt;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.chtitle, li.chtitle, div.chtitle
+	{mso-style-name:"\.ch title";
+	mso-style-parent:"";
+	margin-top:.5in;
+	margin-right:0in;
+	margin-bottom:.25in;
+	margin-left:0in;
+	line-height:29.95pt;
+	mso-pagination:none;
+	font-size:29.5pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.figure, li.figure, div.figure
+	{mso-style-name:"\.figure";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:10.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Univers 45 Light";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.head1, li.head1, div.head1
+	{mso-style-name:"\.head 1";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	mso-style-next:"\.body1";
+	margin-top:20.0pt;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:20.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial Black";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.body1, li.body1, div.body1
+	{mso-style-name:"\.body1";
+	mso-style-parent:"\.body";
+	mso-style-next:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.head2, li.head2, div.head2
+	{mso-style-name:"\.head 2";
+	mso-style-update:auto;
+	mso-style-parent:"\.head 1";
+	mso-style-next:"\.body1";
+	margin-top:7.0pt;
+	margin-right:0in;
+	margin-bottom:7.0pt;
+	margin-left:0in;
+	line-height:16.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	page-break-after:avoid;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial Narrow";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.numlist, li.numlist, div.numlist
+	{mso-style-name:"\.numlist";
+	mso-style-parent:"";
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:.25in;
+	text-align:justify;
+	text-indent:-.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	mso-list:l41 level1 lfo89;
+	tab-stops:list .25in left .5in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.reference, li.reference, div.reference
+	{mso-style-name:"\.reference";
+	mso-style-parent:"";
+	margin-top:3.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:20.0pt;
+	text-align:justify;
+	text-indent:-20.05pt;
+	line-height:12.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	tab-stops:right 12.0pt left 20.0pt;
+	font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.tabletitle, li.tabletitle, div.tabletitle
+	{mso-style-name:"\.table title";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:-.75in;
+	line-height:10.0pt;
+	mso-pagination:none;
+	mso-list:l122 level2 lfo16;
+	tab-stops:list 22.5pt;
+	font-size:8.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Univers 45 Light";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.codeChar2, li.codeChar2, div.codeChar2
+	{mso-style-name:"\.code Char2";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:12.0pt;
+	mso-pagination:none;
+	font-size:10.0pt;
+	font-family:Courier;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	layout-grid-mode:line;}
+p.codeNOTATION, li.codeNOTATION, div.codeNOTATION
+	{mso-style-name:"\.code NOTATION";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.head3alone, li.head3alone, div.head3alone
+	{mso-style-name:"\.head 3alone";
+	mso-style-parent:"";
+	mso-style-next:"\.body";
+	margin-top:7.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.CALLOUT, li.CALLOUT, div.CALLOUT
+	{mso-style-name:"\.CALLOUT";
+	mso-style-parent:"\.body";
+	margin-top:6.0pt;
+	margin-right:.25in;
+	margin-bottom:6.0pt;
+	margin-left:.25in;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.NormalCourierNew, li.NormalCourierNew, div.NormalCourierNew
+	{mso-style-name:"Normal + Courier New\,9 pt\,Bold\,Custom Color\(RGB\(127\,0\,85\)\)";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:9.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.codelisting, li.codelisting, div.codelisting
+	{mso-style-name:"\.code listing";
+	mso-style-update:auto;
+	mso-style-parent:"";
+	mso-style-next:Normal;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Univers 45 Light";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+p.numlist1, li.numlist1, div.numlist1
+	{mso-style-name:"\.numlist 1";
+	mso-style-parent:"\.numlist";
+	mso-style-next:"\.numlist";
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:0in;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	tab-stops:.5in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.bodyChar
+	{mso-style-name:"\.body Char";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.body1Char
+	{mso-style-name:"\.body1 Char";
+	mso-style-parent:"\.body Char";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.codeChar
+	{mso-style-name:"\.code Char";
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;
+	layout-grid-mode:line;}
+span.codeChar1
+	{mso-style-name:"\.code Char1";
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;
+	layout-grid-mode:line;}
+p.multilist, li.multilist, div.multilist
+	{mso-style-name:"\.multilist";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.listing, li.listing, div.listing
+	{mso-style-name:"\.listing";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.note, li.note, div.note
+	{mso-style-name:"\.note";
+	mso-style-parent:"\.numlist";
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:.75in;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	tab-stops:.5in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.numlistChar
+	{mso-style-name:"\.numlist Char";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.noteChar
+	{mso-style-name:"\.note Char";
+	mso-style-parent:"\.numlist Char";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+p.BalloonText, li.BalloonText, div.BalloonText
+	{mso-style-name:"Balloon Text";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:Tahoma;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.doctext, li.doctext, div.doctext
+	{mso-style-name:doctext;
+	margin-right:0in;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:10.5pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.head20, li.head20, div.head20
+	{mso-style-name:"\.head2";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.table, li.table, div.table
+	{mso-style-name:"\.table";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.codeChar2Char
+	{mso-style-name:"\.code Char2 Char";
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;
+	layout-grid-mode:line;}
+p.code, li.code, div.code
+	{mso-style-name:"\.code";
+	mso-style-parent:"\.body1";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:10.0pt;
+	font-family:Courier;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.bodyChar1
+	{mso-style-name:"\.body Char1";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.body1Char1
+	{mso-style-name:"\.body1 Char1";
+	mso-style-parent:"\.body Char1";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.codeChar3
+	{mso-style-name:"\.code Char3";
+	mso-style-parent:"\.body1 Char1";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+p.byd, li.byd, div.byd
+	{mso-style-name:"\.byd";
+	mso-style-parent:"\.code";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:10.0pt;
+	font-family:Courier;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.code0, li.code0, div.code0
+	{mso-style-name:code;
+	mso-style-parent:"\.body1";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.bodyChar2
+	{mso-style-name:"\.body Char2";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.body1Char2
+	{mso-style-name:"\.body1 Char2";
+	mso-style-parent:"\.body Char2";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.codeChar4
+	{mso-style-name:"\.code Char4";
+	mso-style-parent:"\.body1 Char2";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.atitle31
+	{mso-style-name:atitle31;
+	mso-ansi-font-size:14.5pt;
+	mso-bidi-font-size:14.5pt;
+	mso-ascii-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	font-weight:bold;}
+p.chnumber, li.chnumber, div.chnumber
+	{mso-style-name:"\.ch number";
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:36.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	text-shadow:auto;
+	mso-bidi-font-style:italic;}
+p.chheader, li.chheader, div.chheader
+	{mso-style-name:"\.ch header";
+	mso-style-parent:"\.ch title";
+	margin-top:.5in;
+	margin-right:0in;
+	margin-bottom:.25in;
+	margin-left:0in;
+	mso-line-height-alt:29.95pt;
+	mso-pagination:none;
+	mso-outline-level:1;
+	font-size:32.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	mso-bidi-font-style:italic;}
+p.chcontentheader, li.chcontentheader, div.chcontentheader
+	{mso-style-name:"\.ch content header";
+	mso-style-parent:"\.head 3alone";
+	margin-top:7.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.chcontentsummary, li.chcontentsummary, div.chcontentsummary
+	{mso-style-name:"\.ch content summary";
+	mso-style-parent:"\.numlist";
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:.25in;
+	text-align:justify;
+	text-indent:-.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	mso-list:l41 level1 lfo89;
+	tab-stops:list .25in left .5in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-style:italic;}
+span.bodyChar3
+	{mso-style-name:"\.body Char3";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.body1Char3
+	{mso-style-name:"\.body1 Char3";
+	mso-style-parent:"\.body Char3";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.codeChar5
+	{mso-style-name:"\.code Char5";
+	mso-style-parent:"\.body1 Char3";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.bodyChar4
+	{mso-style-name:"\.body Char4";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.body1Char4
+	{mso-style-name:"\.body1 Char4";
+	mso-style-parent:"\.body Char4";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:AGaramond;
+	mso-hansi-font-family:AGaramond;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+span.codeChar6
+	{mso-style-name:"\.code Char6";
+	mso-style-parent:"\.body1 Char4";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+p.head10, li.head10, div.head10
+	{mso-style-name:"\.head1";
+	mso-style-parent:"\.head 3alone";
+	margin-top:7.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Arial Black";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.V, li.V, div.V
+	{mso-style-name:V;
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.TheFormTagcancontainothertagsinitsbodySubmitTaggeneratestheSubmitbuttonatruntimeTheTextTaghtmltextgenerateshtmltextboxatruntimeasfollows, li.TheFormTagcancontainothertagsinitsbodySubmitTaggeneratestheSubmitbuttonatruntimeTheTextTaghtmltextgenerateshtmltextboxatruntimeasfollows, div.TheFormTagcancontainothertagsinitsbodySubmitTaggeneratestheSubmitbuttonatruntimeTheTextTaghtmltextgenerateshtmltextboxatruntimeasfollows
+	{mso-style-name:"The FormTag can contain other tags in its body\. SubmitTag generates the Submit button at runtime\. The TextTag <html\:text> generates html textbox at runtime as follows\.";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:.25in;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.num, li.num, div.num
+	{mso-style-name:"\.num";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.coee, li.coee, div.coee
+	{mso-style-name:"\.coee";
+	mso-style-parent:"\.body";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	line-height:13.95pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:widow-orphan;
+	tab-stops:.25in;
+	font-size:11.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+p.numlis, li.numlis, div.numlis
+	{mso-style-name:"\.numlis";
+	margin-right:.5in;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:1.0in;
+	text-indent:-.25in;
+	mso-pagination:widow-orphan;
+	mso-list:l80 level1 lfo139;
+	tab-stops:list .5in;
+	font-size:9.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	mso-ansi-language:EN;}
+span.codeChar5Char
+	{mso-style-name:"\.code Char5 Char";
+	mso-style-parent:"\.body1 Char3";
+	mso-ansi-font-size:11.0pt;
+	mso-ascii-font-family:Courier;
+	mso-hansi-font-family:Courier;
+	color:black;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+p.booktitle, li.booktitle, div.booktitle
+	{mso-style-name:"\.booktitle";
+	mso-style-parent:"\.ch number";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:36.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	text-shadow:auto;
+	font-weight:bold;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.booksubtitle, li.booksubtitle, div.booksubtitle
+	{mso-style-name:"\.booksubtitle";
+	mso-style-parent:"\.ch number";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:20.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	text-shadow:auto;
+	font-weight:bold;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.preface, li.preface, div.preface
+	{mso-style-name:"\.preface";
+	mso-style-parent:"\.head 1";
+	margin-top:20.0pt;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:20.0pt;
+	mso-line-height-rule:exactly;
+	mso-pagination:none;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Arial Black";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.upcomingbook, li.upcomingbook, div.upcomingbook
+	{mso-style-name:"\.upcomingbook";
+	mso-style-parent:"\.booktitle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	font-style:italic;}
+p.newbook, li.newbook, div.newbook
+	{mso-style-name:"\.newbook";
+	mso-style-parent:"\.booktitle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:20.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	text-shadow:auto;
+	font-weight:bold;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.newbooksubtitle, li.newbooksubtitle, div.newbooksubtitle
+	{mso-style-name:"\.newbooksubtitle";
+	mso-style-parent:"\.booksubtitle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;
+	text-shadow:auto;
+	font-weight:bold;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.Default, li.Default, div.Default
+	{mso-style-name:Default;
+	mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	mso-layout-grid-align:none;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:Courier-Oblique;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:windowtext;}
+p.body0, li.body0, div.body0
+	{mso-style-name:body;
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-indent:.25in;
+	line-height:13.95pt;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:AGaramond;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+ /* Page Definitions */
+@page
+	{mso-mirror-margins:yes;
+	mso-facing-pages:yes;
+	mso-footnote-numbering-restart:each-section;}
+@page Section1
+	{size:7.0in 10.0in;
+	margin:1.0in 1.0in .75in 1.0in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-page-numbers:1;
+	mso-page-numbers-chapter-separator:period;
+	mso-title-page:yes;
+	mso-even-header:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") eh1;
+	mso-header:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") h1;
+	mso-even-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") ef1;
+	mso-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") f1;
+	mso-first-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") ff1;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+@page Section2
+	{size:7.0in 10.0in;
+	margin:1.0in 1.0in .75in 1.0in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-page-numbers-chapter-separator:period;
+	mso-title-page:yes;
+	mso-even-header:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") eh2;
+	mso-header:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") h1;
+	mso-even-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") ef1;
+	mso-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") f1;
+	mso-first-footer:url("./Ch21-ClassLoaders_and_J2EE_files/header.htm") ff1;
+	mso-paper-source:0;}
+div.Section2
+	{page:Section2;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:-132;
+	mso-list-type:simple;
+	mso-list-template-ids:-228132640;}
+@list l0:level1
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l1
+	{mso-list-id:-131;
+	mso-list-type:simple;
+	mso-list-template-ids:-377079316;}
+@list l1:level1
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;}
+@list l2
+	{mso-list-id:-130;
+	mso-list-type:simple;
+	mso-list-template-ids:718947088;}
+@list l2:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l3
+	{mso-list-id:-129;
+	mso-list-type:simple;
+	mso-list-template-ids:-1962932978;}
+@list l3:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4
+	{mso-list-id:-128;
+	mso-list-type:simple;
+	mso-list-template-ids:1631212760;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l5
+	{mso-list-id:-127;
+	mso-list-type:simple;
+	mso-list-template-ids:-643027814;}
+@list l5:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l6
+	{mso-list-id:-126;
+	mso-list-type:simple;
+	mso-list-template-ids:794433846;}
+@list l6:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l7
+	{mso-list-id:-125;
+	mso-list-type:simple;
+	mso-list-template-ids:89283198;}
+@list l7:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l8
+	{mso-list-id:-120;
+	mso-list-type:simple;
+	mso-list-template-ids:-456625120;}
+@list l8:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l9
+	{mso-list-id:-119;
+	mso-list-type:simple;
+	mso-list-template-ids:297966084;}
+@list l9:level1
+	{mso-level-number-format:bullet;
+	mso-level-style-link:"List Bullet";
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l10
+	{mso-list-id:14355376;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1153657022 360479992 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l10:level1
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;}
+@list l11
+	{mso-list-id:29767198;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-902279954 873355766 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l11:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l12
+	{mso-list-id:37240962;
+	mso-list-template-ids:-697682132;}
+@list l12:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l12:level2
+	{mso-level-start-at:3;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l12:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l12:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l12:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l12:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l12:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l12:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l12:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l13
+	{mso-list-id:57753739;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1071489896 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l13:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l14
+	{mso-list-id:58752605;
+	mso-list-type:hybrid;
+	mso-list-template-ids:44579496 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l14:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l15
+	{mso-list-id:59594901;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1888167494 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l15:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l16
+	{mso-list-id:60296839;
+	mso-list-type:simple;
+	mso-list-template-ids:83124294;}
+@list l16:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17
+	{mso-list-id:85998063;
+	mso-list-template-ids:-1592220336;}
+@list l17:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l17:level2
+	{mso-level-text:"\.%1%2";
+	mso-level-tab-stop:.4in;
+	mso-level-number-position:left;
+	margin-left:.4in;
+	text-indent:-.4in;
+	mso-ansi-font-size:8.0pt;
+	font-family:Helvetica;
+	mso-ansi-font-weight:bold;
+	mso-ansi-font-style:normal;}
+@list l17:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l17:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l17:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l17:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l17:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l17:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l17:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l18
+	{mso-list-id:106311733;
+	mso-list-template-ids:451301650;}
+@list l18:level1
+	{mso-level-start-at:8;
+	mso-level-text:%1;
+	mso-level-tab-stop:22.5pt;
+	mso-level-number-position:left;
+	margin-left:22.5pt;
+	text-indent:-22.5pt;}
+@list l18:level2
+	{mso-level-text:"4\.%2";
+	mso-level-tab-stop:22.5pt;
+	mso-level-number-position:left;
+	margin-left:22.5pt;
+	text-indent:-22.5pt;}
+@list l18:level3
+	{mso-level-text:"4\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l18:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l18:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l18:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l18:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l18:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l18:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l19
+	{mso-list-id:112865796;
+	mso-list-type:simple;
+	mso-list-template-ids:197288018;}
+@list l19:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l20
+	{mso-list-id:121115669;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1241470380 1348993280 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l20:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l21
+	{mso-list-id:136383842;
+	mso-list-type:hybrid;
+	mso-list-template-ids:868647604 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l21:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l22
+	{mso-list-id:166990003;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-946600404 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l22:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l23
+	{mso-list-id:169108687;
+	mso-list-template-ids:-1494851106;}
+@list l23:level1
+	{mso-level-style-link:"\.code listing";
+	mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;}
+@list l23:level2
+	{mso-level-reset-level:level1;
+	mso-level-style-link:"\.code listing";
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.4in;
+	mso-level-number-position:left;
+	margin-left:.4in;
+	text-indent:-.4in;}
+@list l23:level3
+	{mso-level-style-link:"Heading 3";
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l23:level4
+	{mso-level-style-link:"Heading 4";
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l23:level5
+	{mso-level-style-link:"Heading 5";
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l23:level6
+	{mso-level-style-link:"Heading 6";
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l23:level7
+	{mso-level-style-link:"Heading 7";
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l23:level8
+	{mso-level-style-link:"Heading 8";
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l23:level9
+	{mso-level-style-link:"Heading 9";
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l24
+	{mso-list-id:176504070;
+	mso-list-type:hybrid;
+	mso-list-template-ids:2144086672 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l24:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l24:level2
+	{mso-level-start-at:5;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:66.6pt;
+	mso-level-number-position:left;
+	margin-left:66.6pt;
+	text-indent:-30.6pt;}
+@list l24:level3
+	{mso-level-start-at:3;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.5in;}
+@list l24:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.5in;}
+@list l24:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.75in;}
+@list l24:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.75in;}
+@list l24:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.0in;}
+@list l24:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.0in;}
+@list l24:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.0in;}
+@list l25
+	{mso-list-id:179241909;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-851405960 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l25:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l25:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+@list l26
+	{mso-list-id:205221264;
+	mso-list-template-ids:-394879056;}
+@list l26:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l27
+	{mso-list-id:207449872;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1682486140 67698689 67698703 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l27:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l27:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l28
+	{mso-list-id:216937627;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-645251014 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l28:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l28:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+@list l29
+	{mso-list-id:217596746;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1686949390 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l29:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l30
+	{mso-list-id:231818803;
+	mso-list-template-ids:-627679386;}
+@list l30:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l30:level2
+	{mso-level-tab-stop:49.5pt;
+	mso-level-number-position:left;
+	margin-left:49.5pt;
+	text-indent:-.25in;}
+@list l30:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:right;
+	margin-left:1.75in;
+	text-indent:-9.0pt;}
+@list l30:level4
+	{mso-level-tab-stop:2.25in;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:-.25in;}
+@list l30:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.75in;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:-.25in;}
+@list l30:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.25in;
+	mso-level-number-position:right;
+	margin-left:3.25in;
+	text-indent:-9.0pt;}
+@list l30:level7
+	{mso-level-tab-stop:3.75in;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:-.25in;}
+@list l30:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.25in;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:-.25in;}
+@list l30:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.75in;
+	mso-level-number-position:right;
+	margin-left:4.75in;
+	text-indent:-9.0pt;}
+@list l31
+	{mso-list-id:255360148;
+	mso-list-type:hybrid;
+	mso-list-template-ids:577029162 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l31:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l32
+	{mso-list-id:267197238;
+	mso-list-type:hybrid;
+	mso-list-template-ids:891162034 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l32:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l33
+	{mso-list-id:268658599;
+	mso-list-template-ids:2116560388;}
+@list l33:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;}
+@list l33:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;}
+@list l33:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l33:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l33:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l33:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l33:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l33:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l33:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l34
+	{mso-list-id:308756103;
+	mso-list-type:hybrid;
+	mso-list-template-ids:2130985128 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l34:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l35
+	{mso-list-id:317271618;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-803599408 -1813085556 -1983593024 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l35:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l35:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.65in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.1in;}
+@list l36
+	{mso-list-id:337470028;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1882447560 -615984090 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l36:level1
+	{mso-level-start-at:2;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l37
+	{mso-list-id:346103835;
+	mso-list-type:hybrid;
+	mso-list-template-ids:34640594 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l37:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l38
+	{mso-list-id:346686610;
+	mso-list-template-ids:275832386;}
+@list l38:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l39
+	{mso-list-id:347293759;
+	mso-list-template-ids:-2133686866;}
+@list l39:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l39:level2
+	{mso-level-number-format:none;
+	mso-level-text:"Table 5\.1";
+	mso-level-tab-stop:171.0pt;
+	mso-level-number-position:left;
+	margin-left:171.0pt;
+	text-indent:-.25in;}
+@list l39:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l39:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l39:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l39:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l39:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l39:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l39:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l40
+	{mso-list-id:356321956;
+	mso-list-template-ids:-401820506;}
+@list l40:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l40:level2
+	{mso-level-start-at:2;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l40:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l40:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l40:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l40:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l40:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l40:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l40:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l41
+	{mso-list-id:357433670;
+	mso-list-type:hybrid;
+	mso-list-template-ids:807287520 -1712702600 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l41:level1
+	{mso-level-style-link:"\.numlist";
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l41:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l42
+	{mso-list-id:357895433;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1595236114 1674463788 67698689 1663585410 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l42:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l42:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:27.0pt;
+	mso-level-number-position:left;
+	margin-left:27.0pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l42:level3
+	{mso-level-tab-stop:99.0pt;
+	mso-level-number-position:left;
+	margin-left:99.0pt;
+	text-indent:-.25in;}
+@list l43
+	{mso-list-id:362563674;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1411996420 -1105020740 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l43:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l44
+	{mso-list-id:366299331;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1071403056 421936634 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l44:level1
+	{mso-level-text:"3\.";
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l45
+	{mso-list-id:407312744;
+	mso-list-template-ids:-724510814;}
+@list l45:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l45:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.4in;
+	mso-level-number-position:left;
+	margin-left:.4in;
+	text-indent:-.4in;}
+@list l45:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l45:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l45:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l45:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l45:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l45:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l45:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l46
+	{mso-list-id:426853081;
+	mso-list-template-ids:851079540;}
+@list l46:level1
+	{mso-level-start-at:4;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l46:level2
+	{mso-level-start-at:5;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l46:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l46:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l46:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l46:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l46:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l46:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l46:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l47
+	{mso-list-id:434519062;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1887552070 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l47:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l48
+	{mso-list-id:451217679;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1736990182 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l48:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l48:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l49
+	{mso-list-id:487206809;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-572732370 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l49:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l50
+	{mso-list-id:566064665;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-914074160 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l50:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l51
+	{mso-list-id:613827005;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1120429158 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l51:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l52
+	{mso-list-id:614557191;
+	mso-list-template-ids:-1122589414;}
+@list l52:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l52:level2
+	{mso-level-start-at:2;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l52:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l52:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l52:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l52:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l52:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l52:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l52:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l53
+	{mso-list-id:684330132;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1886614260 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l53:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l53:level2
+	{mso-level-start-at:7;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l53:level3
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l53:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l53:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l53:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l53:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l53:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l53:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l54
+	{mso-list-id:705301492;
+	mso-list-template-ids:-2069175784;}
+@list l54:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l54:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l54:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:right;
+	margin-left:1.75in;
+	text-indent:-9.0pt;}
+@list l54:level4
+	{mso-level-tab-stop:2.25in;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:-.25in;}
+@list l54:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.75in;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:-.25in;}
+@list l54:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.25in;
+	mso-level-number-position:right;
+	margin-left:3.25in;
+	text-indent:-9.0pt;}
+@list l54:level7
+	{mso-level-tab-stop:3.75in;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:-.25in;}
+@list l54:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.25in;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:-.25in;}
+@list l54:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.75in;
+	mso-level-number-position:right;
+	margin-left:4.75in;
+	text-indent:-9.0pt;}
+@list l55
+	{mso-list-id:719669674;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1638700740 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l55:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l56
+	{mso-list-id:721951175;
+	mso-list-template-ids:-760971376;}
+@list l56:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l56:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.4in;
+	mso-level-number-position:left;
+	margin-left:.4in;
+	text-indent:-.4in;}
+@list l56:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l56:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l56:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l56:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l56:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l56:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l56:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l57
+	{mso-list-id:726295438;
+	mso-list-type:hybrid;
+	mso-list-template-ids:686878834 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l57:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l58
+	{mso-list-id:741214934;
+	mso-list-type:hybrid;
+	mso-list-template-ids:789479098 -1600085372 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l58:level1
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;}
+@list l59
+	{mso-list-id:745958411;
+	mso-list-template-ids:1030534496;}
+@list l59:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l59:level2
+	{mso-level-start-at:2;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l59:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l59:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l59:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l59:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l59:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l59:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l59:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l60
+	{mso-list-id:848833921;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1055901686 726569728 -159366888 -1581354018 -1674157008 -288821444 -2076026066 1419391480 1033250658 1052132058;}
+@list l60:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l61
+	{mso-list-id:858004950;
+	mso-list-type:hybrid;
+	mso-list-template-ids:971172652 786706908 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l61:level1
+	{mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l62
+	{mso-list-id:858853576;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-357118488 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l62:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l63
+	{mso-list-id:863371582;
+	mso-list-template-ids:-1437970474;}
+@list l63:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l63:level2
+	{mso-level-number-format:none;
+	mso-level-text:"Table 5\.2";
+	mso-level-tab-stop:171.0pt;
+	mso-level-number-position:left;
+	margin-left:171.0pt;
+	text-indent:-.25in;}
+@list l63:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l63:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l63:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l63:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l63:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l63:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l63:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l64
+	{mso-list-id:889658202;
+	mso-list-template-ids:44579496;}
+@list l64:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l64:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l64:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l64:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l64:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l64:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l64:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l64:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l64:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l65
+	{mso-list-id:972908484;
+	mso-list-type:simple;
+	mso-list-template-ids:866564192;}
+@list l65:level1
+	{mso-level-start-at:3;
+	mso-level-text:"1\.%1 ";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:.25in;
+	mso-level-legacy-space:0in;
+	margin-left:.25in;
+	text-indent:-.25in;
+	mso-ansi-font-size:20.0pt;
+	font-family:AGaramond;
+	color:black;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:italic;
+	text-decoration:none;
+	text-underline:none;}
+@list l66
+	{mso-list-id:988676347;
+	mso-list-type:simple;
+	mso-list-template-ids:273600958;}
+@list l66:level1
+	{mso-level-number-format:bullet;
+	mso-level-style-link:"\.bullet";
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:40.5pt;
+	mso-level-number-position:left;
+	margin-left:40.5pt;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l67
+	{mso-list-id:1022509166;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-140244488 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l67:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l68
+	{mso-list-id:1025713266;
+	mso-list-template-ids:-2069175784;}
+@list l68:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l68:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l68:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:right;
+	margin-left:1.75in;
+	text-indent:-9.0pt;}
+@list l68:level4
+	{mso-level-tab-stop:2.25in;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:-.25in;}
+@list l68:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.75in;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:-.25in;}
+@list l68:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.25in;
+	mso-level-number-position:right;
+	margin-left:3.25in;
+	text-indent:-9.0pt;}
+@list l68:level7
+	{mso-level-tab-stop:3.75in;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:-.25in;}
+@list l68:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.25in;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:-.25in;}
+@list l68:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.75in;
+	mso-level-number-position:right;
+	margin-left:4.75in;
+	text-indent:-9.0pt;}
+@list l69
+	{mso-list-id:1038775693;
+	mso-list-type:hybrid;
+	mso-list-template-ids:151190998 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l69:level1
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l70
+	{mso-list-id:1059985920;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1686049844 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l70:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l71
+	{mso-list-id:1069765348;
+	mso-list-type:hybrid;
+	mso-list-template-ids:342147132 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l71:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l72
+	{mso-list-id:1120758861;
+	mso-list-type:hybrid;
+	mso-list-template-ids:581892066 1753625512 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l72:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l73
+	{mso-list-id:1130198709;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1892019002 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l73:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l74
+	{mso-list-id:1156533273;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1311467396 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l74:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l74:level2
+	{mso-level-start-at:5;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:48.0pt;
+	mso-level-number-position:left;
+	margin-left:48.0pt;
+	text-indent:-30.0pt;}
+@list l74:level3
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l74:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l74:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l74:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l74:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l74:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l74:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l75
+	{mso-list-id:1216313559;
+	mso-list-type:hybrid;
+	mso-list-template-ids:529315764 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l75:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l76
+	{mso-list-id:1233081985;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1203610106 67698689 898950820 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l76:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l76:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l77
+	{mso-list-id:1235243134;
+	mso-list-template-ids:-1838363042;}
+@list l77:level1
+	{mso-level-start-at:4;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l77:level2
+	{mso-level-start-at:3;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l77:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l77:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l77:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l77:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l77:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l77:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l77:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l78
+	{mso-list-id:1253198886;
+	mso-list-type:hybrid;
+	mso-list-template-ids:68090594 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l78:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l79
+	{mso-list-id:1258754223;
+	mso-list-type:hybrid;
+	mso-list-template-ids:2138372132 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l79:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l80
+	{mso-list-id:1332365852;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-873985938 -922465202 -838686114 2027447870 -344451798 1901493116 -494238744 -110189778 -1615952132 265445372;}
+@list l80:level1
+	{mso-level-number-format:bullet;
+	mso-level-style-link:"\.numlis";
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l81
+	{mso-list-id:1347558653;
+	mso-list-template-ids:512802958;}
+@list l81:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l81:level2
+	{mso-level-number-format:none;
+	mso-level-text:"5\.1";
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l81:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l81:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l81:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l81:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l81:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l81:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l81:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l82
+	{mso-list-id:1350834490;
+	mso-list-type:hybrid;
+	mso-list-template-ids:797743722 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l82:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l82:level2
+	{mso-level-start-at:5;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:54.6pt;
+	mso-level-number-position:left;
+	margin-left:54.6pt;
+	text-indent:-36.6pt;}
+@list l82:level3
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:54.6pt;
+	mso-level-number-position:left;
+	margin-left:54.6pt;
+	text-indent:-36.6pt;}
+@list l82:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:54.6pt;
+	mso-level-number-position:left;
+	margin-left:54.6pt;
+	text-indent:-36.6pt;}
+@list l82:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l82:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l82:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l82:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l82:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l83
+	{mso-list-id:1367176441;
+	mso-list-type:hybrid;
+	mso-list-template-ids:359797926 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l83:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l83:level2
+	{mso-level-start-at:6;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l83:level3
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l83:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l83:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l83:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l83:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l83:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l83:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l84
+	{mso-list-id:1371805923;
+	mso-list-template-ids:-672243476;}
+@list l84:level1
+	{mso-level-start-at:8;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l84:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l84:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l84:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l84:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l84:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l84:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l84:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l84:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l85
+	{mso-list-id:1375500481;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1821626004 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l85:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l86
+	{mso-list-id:1392272162;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1730523530 -1810460800 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l86:level1
+	{mso-level-tab-stop:48.0pt;
+	mso-level-number-position:left;
+	margin-left:48.0pt;
+	text-indent:-30.0pt;}
+@list l87
+	{mso-list-id:1395733491;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1171154674 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l87:level1
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.25in;}
+@list l88
+	{mso-list-id:1418013086;
+	mso-list-template-ids:851079540;}
+@list l88:level1
+	{mso-level-start-at:7;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l88:level2
+	{mso-level-start-at:2;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l88:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l88:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l88:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l88:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l88:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l88:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l88:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l89
+	{mso-list-id:1433628862;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1861875568 -1600076984 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l89:level1
+	{mso-level-text:"%1\)";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l90
+	{mso-list-id:1469738628;
+	mso-list-type:simple;
+	mso-list-template-ids:515428964;}
+@list l90:level1
+	{mso-level-text:"%1\. ";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:.25in;
+	mso-level-legacy-space:0in;
+	margin-left:17.95pt;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.5pt;
+	font-family:AGaramond;
+	color:black;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-decoration:none;
+	text-underline:none;}
+@list l91
+	{mso-list-id:1476949770;
+	mso-list-type:hybrid;
+	mso-list-template-ids:496394958 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l91:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l92
+	{mso-list-id:1493762952;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-903735158 -315952192 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l92:level1
+	{mso-level-tab-stop:48.0pt;
+	mso-level-number-position:left;
+	margin-left:48.0pt;
+	text-indent:-30.0pt;}
+@list l93
+	{mso-list-id:1524124098;
+	mso-list-type:simple;
+	mso-list-template-ids:-1173859594;}
+@list l93:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	mso-ansi-font-weight:bold;}
+@list l94
+	{mso-list-id:1536654806;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1505870340 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l94:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l95
+	{mso-list-id:1578591225;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1082571092 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l95:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l96
+	{mso-list-id:1578705433;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1573876366 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l96:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l96:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l97
+	{mso-list-id:1591622734;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1702665772 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l97:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l98
+	{mso-list-id:1600484171;
+	mso-list-template-ids:-22003234;}
+@list l98:level1
+	{mso-level-style-link:"\.figure";
+	mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l98:level2
+	{mso-level-reset-level:level1;
+	mso-level-suffix:space;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;}
+@list l98:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l98:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l98:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l98:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l98:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l98:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l98:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l99
+	{mso-list-id:1613367210;
+	mso-list-template-ids:1649413328;}
+@list l99:level1
+	{mso-level-start-at:8;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l99:level2
+	{mso-level-start-at:3;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l99:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l99:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l99:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l99:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l99:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l99:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l99:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l100
+	{mso-list-id:1618368544;
+	mso-list-type:simple;
+	mso-list-template-ids:388789304;}
+@list l100:level1
+	{mso-level-text:"%1\.1";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l101
+	{mso-list-id:1628197704;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1975110330 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l101:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l102
+	{mso-list-id:1629623102;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1013136260 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l102:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l103
+	{mso-list-id:1632133158;
+	mso-list-template-ids:-1191812678;}
+@list l103:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l103:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l103:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l103:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l103:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l103:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l103:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l103:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l103:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l104
+	{mso-list-id:1689797229;
+	mso-list-type:hybrid;
+	mso-list-template-ids:933267434 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l104:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l105
+	{mso-list-id:1696350617;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2114186438 295201738 -1424865372 -1116586314 616725970 1344587292 -753499348 -1202295020 -297663172 142015868;}
+@list l105:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l106
+	{mso-list-id:1696882698;
+	mso-list-type:hybrid;
+	mso-list-template-ids:121122418 -1381459440 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l106:level1
+	{mso-level-text:"%1\)";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l107
+	{mso-list-id:1702172524;
+	mso-list-type:simple;
+	mso-list-template-ids:1029309054;}
+@list l107:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Wingdings;}
+@list l108
+	{mso-list-id:1718622044;
+	mso-list-template-ids:-1838363042;}
+@list l108:level1
+	{mso-level-start-at:4;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l108:level2
+	{mso-level-start-at:3;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l108:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l108:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l108:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l108:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l108:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l108:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l108:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l109
+	{mso-list-id:1722052251;
+	mso-list-template-ids:-159611606;}
+@list l109:level1
+	{mso-level-start-at:7;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l109:level2
+	{mso-level-start-at:6;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l109:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l109:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l109:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l109:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l109:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l109:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l109:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l110
+	{mso-list-id:1726221992;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1613487014 67698689 67698689 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l110:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l110:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:49.5pt;
+	mso-level-number-position:left;
+	margin-left:49.5pt;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l111
+	{mso-list-id:1750612636;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1539333706 -558216640 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l111:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l112
+	{mso-list-id:1761487313;
+	mso-list-template-ids:851079540;}
+@list l112:level1
+	{mso-level-start-at:4;
+	mso-level-text:%1;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.5in;}
+@list l112:level2
+	{mso-level-start-at:5;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l112:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l112:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l112:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l112:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l112:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l112:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l112:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l113
+	{mso-list-id:1788355737;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1771767434 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l113:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l114
+	{mso-list-id:1822388139;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1768365988 1601702304 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l114:level1
+	{mso-level-text:"%1\)";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l115
+	{mso-list-id:1837763894;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-223582742 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l115:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l116
+	{mso-list-id:1847479776;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1148186718 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l116:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l117
+	{mso-list-id:1861386159;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-354263382 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l117:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l117:level2
+	{mso-level-start-at:4;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l117:level3
+	{mso-level-start-at:3;
+	mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l117:level4
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.5in;}
+@list l117:level5
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l117:level6
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-.75in;}
+@list l117:level7
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l117:level8
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l117:level9
+	{mso-level-legal-format:yes;
+	mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.0in;}
+@list l118
+	{mso-list-id:1885482104;
+	mso-list-type:simple;
+	mso-list-template-ids:1994843280;}
+@list l118:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l119
+	{mso-list-id:1933127319;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2118120238 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l119:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l120
+	{mso-list-id:1936477571;
+	mso-list-template-ids:-541188096;}
+@list l120:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l120:level2
+	{mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.4in;
+	mso-level-number-position:left;
+	margin-left:.4in;
+	text-indent:-.4in;}
+@list l120:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l120:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l120:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l120:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l120:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l120:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l120:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l121
+	{mso-list-id:1970547929;
+	mso-list-template-ids:-2069175784;}
+@list l121:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l121:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l121:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:right;
+	margin-left:1.75in;
+	text-indent:-9.0pt;}
+@list l121:level4
+	{mso-level-tab-stop:2.25in;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:-.25in;}
+@list l121:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.75in;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:-.25in;}
+@list l121:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.25in;
+	mso-level-number-position:right;
+	margin-left:3.25in;
+	text-indent:-9.0pt;}
+@list l121:level7
+	{mso-level-tab-stop:3.75in;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:-.25in;}
+@list l121:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.25in;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:-.25in;}
+@list l121:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.75in;
+	mso-level-number-position:right;
+	margin-left:4.75in;
+	text-indent:-9.0pt;}
+@list l122
+	{mso-list-id:1994866531;
+	mso-list-template-ids:-1288118804;}
+@list l122:level1
+	{mso-level-text:%1;
+	mso-level-tab-stop:.3in;
+	mso-level-number-position:left;
+	margin-left:.3in;
+	text-indent:-.3in;
+	font-family:AGaramond;
+	mso-hansi-font-family:"AGaramond Bold";}
+@list l122:level2
+	{mso-level-number-format:none;
+	mso-level-style-link:"\.table title";
+	mso-level-text:"Table 5\.3";
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l122:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l122:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:.6in;
+	mso-level-number-position:left;
+	margin-left:.6in;
+	text-indent:-.6in;}
+@list l122:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:.7in;
+	mso-level-number-position:left;
+	margin-left:.7in;
+	text-indent:-.7in;}
+@list l122:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:.8in;
+	mso-level-number-position:left;
+	margin-left:.8in;
+	text-indent:-.8in;}
+@list l122:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:.9in;
+	mso-level-number-position:left;
+	margin-left:.9in;
+	text-indent:-.9in;}
+@list l122:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l122:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:1.1in;
+	mso-level-number-position:left;
+	margin-left:1.1in;
+	text-indent:-1.1in;}
+@list l123
+	{mso-list-id:2026713854;
+	mso-list-type:hybrid;
+	mso-list-template-ids:84041456 67698689 898950820 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l123:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l123:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l124
+	{mso-list-id:2031176367;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-485836586 -1813085556 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l124:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l125
+	{mso-list-id:2066249248;
+	mso-list-template-ids:-314161464;}
+@list l125:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l125:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-style-link:Normal;
+	mso-level-tab-stop:.65in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.1in;}
+@list l126
+	{mso-list-id:2081707340;
+	mso-list-template-ids:181956502;}
+@list l126:level1
+	{mso-level-start-at:9;
+	mso-level-text:%1;
+	mso-level-tab-stop:25.5pt;
+	mso-level-number-position:left;
+	margin-left:25.5pt;
+	text-indent:-25.5pt;}
+@list l126:level2
+	{mso-level-start-at:5;
+	mso-level-text:"%1\.%2";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.5in;
+	text-indent:-.5in;}
+@list l126:level3
+	{mso-level-text:"%1\.%2\.%3";
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.75in;}
+@list l126:level4
+	{mso-level-text:"%1\.%2\.%3\.%4";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l126:level5
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5";
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	margin-left:1.0in;
+	text-indent:-1.0in;}
+@list l126:level6
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6";
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-1.25in;}
+@list l126:level7
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7";
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	margin-left:1.5in;
+	text-indent:-1.5in;}
+@list l126:level8
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8";
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:-1.75in;}
+@list l126:level9
+	{mso-level-text:"%1\.%2\.%3\.%4\.%5\.%6\.%7\.%8\.%9";
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	margin-left:2.0in;
+	text-indent:-2.0in;}
+@list l127
+	{mso-list-id:2089693463;
+	mso-list-template-ids:-2069175784;}
+@list l127:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;}
+@list l127:level2
+	{mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l127:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.75in;
+	mso-level-number-position:right;
+	margin-left:1.75in;
+	text-indent:-9.0pt;}
+@list l127:level4
+	{mso-level-tab-stop:2.25in;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:-.25in;}
+@list l127:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.75in;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:-.25in;}
+@list l127:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.25in;
+	mso-level-number-position:right;
+	margin-left:3.25in;
+	text-indent:-9.0pt;}
+@list l127:level7
+	{mso-level-tab-stop:3.75in;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:-.25in;}
+@list l127:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.25in;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:-.25in;}
+@list l127:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.75in;
+	mso-level-number-position:right;
+	margin-left:4.75in;
+	text-indent:-9.0pt;}
+@list l128
+	{mso-list-id:2128086457;
+	mso-list-type:simple;
+	mso-list-template-ids:-715250042;}
+@list l128:level1
+	{mso-level-text:"%1\.1";
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l129
+	{mso-list-id:2128111148;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-772235016 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l129:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l130
+	{mso-list-id:2142770014;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1865956008 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l130:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l131
+	{mso-list-id:2147163938;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1116105006 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l131:level1
+	{mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;}
+@list l41:level1 lfo169
+	{mso-level-start-at:5;}
+@list l41:level1 lfo170
+	{mso-level-start-at:2;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3074"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+
+<div class=Section2>
+
+<p class=chnumber><b style='mso-bidi-font-weight:normal'><span
+style='text-shadow:none'>Chapter 21<o:p></o:p></span></b></p>
+
+<p class=chheader><span style='font-size:26.0pt;mso-bidi-font-size:10.0pt'>Classloaders
+and J2EE<o:p></o:p></span></p>
+
+<table border=1 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;
+ border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width=600 valign=top style='width:5.0in;border:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=chcontentheader><b><span style='font-size:12.0pt;mso-bidi-font-size:
+  10.0pt'>In this chapter:<o:p></o:p></span></b></p>
+  <p class=numlist><![if !supportLists]>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><![endif]>You will understand why classloaders are important in Java
+  and more so in J2EE environments. </p>
+  <p class=numlist><![if !supportLists]>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><![endif]>You will gain an in-depth knowledge of classloaders.</p>
+  <p class=numlist><![if !supportLists]>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span><![endif]>You will learn about the J2EE classloader hierarchy and its
+  implications.</p>
+  </td>
+ </tr>
+</table>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1>Thorough understanding of classloaders is the basis for better
+partitioning, packaging and deployment of J2EE applications and ultimately for
+better architecture. So, it is time to get back to the basics of architecture
+and take it from there.</p>
+
+<p class=head1>21.1 Classloader basics<!--[if supportFields]><span
+style='mso-element:field-begin'></span> XE &quot;Model 1 Architecture&quot; <![endif]--><!--[if supportFields]><span
+style='mso-element:field-end'></span><![endif]--></p>
+
+<p class=body1>Regular Java applications running from command line involve
+three classloaders – Bootstrap, Extensions and System-Classpath classloaders,
+although it will appear as though there is only one classloader to the
+unsuspecting programmer. The three class loaders have a parent child
+relationship among themselves. This relationship is similar to the parent and
+child class relationship in object oriented programming and is shown in Figure
+21.1 as a UML diagram.</p>
+
+<p class=body><!--[if gte vml 1]><v:shape id="_x0000_s1466" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:112.4pt;
+ margin-top:11.35pt;width:135pt;height:104.75pt;z-index:3'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image005.png" o:title="Figure 1_1"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=150 height=15></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=180 height=140
+  src="./Ch21-ClassLoaders_and_J2EE_files/image006.jpg" v:shapes="_x0000_s1466"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body style='text-indent:0in'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body style='text-indent:0in'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.1 Classloader hierarchy for a stand alone Java
+program.</p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><i>Bootstrap classloader</i> is the parent of all classloaders
+and loads the standard JDK classes in lib directory of JRE (<i>rt.jar</i> and <i>i18n.jar</i>).
+All the <span style='font-size:10.0pt;font-family:Courier'>java.*</span>
+classes are loaded by this classloader.</p>
+
+<p class=body><i>Extensions Classloader</i> is the immediate child of Bootstrap
+classloader. This classloader loads the classes in <i>lib\ext</i> directory of
+the JRE. For example, JDK1.4.x ships with its own implementation for JCE. The
+JCE implementation is identified by the <i>sunjceprovider.jar</i> and is
+present in <i>JRE/lib/ext</i> directory and is loaded by the extensions classloader.</p>
+
+<p class=body><i>System-Classpath classloader</i> is the immediate child of
+Extensions classloader. It loads the classes and jars specified by the
+CLASSPATH environment variable, <span style='font-size:10.0pt;font-family:Courier'>java.class.path</span>
+system property, <span style='font-size:10.0pt;font-family:Courier'>-cp</span>
+or <span style='font-size:10.0pt;font-family:Courier'>–classpath</span> command
+line settings. If any of the jars specified in one of the above manner have a <i>MANIFEST.MF</i>
+file with a <span style='font-size:10.0pt;font-family:Courier'>Class-Path</span>
+attribute, the jars specified by the <span style='font-size:10.0pt;font-family:
+Courier'>Class-Path</span> attribute are also loaded.</p>
+
+<p class=head2>Classloader Magic</p>
+
+<p class=body>Things are not so straightforward with J2EE. J2EE does not define
+a fixed classloader structure, but leaves it to vendors. But generally they
+follow a hierarchy and you have to understand it clearly to design applications
+well. The explicit presence of multiple classloaders in J2EE applications poses
+some unique challenges. For instance, consider the <span style='font-size:10.0pt;
+font-family:Courier'>Person</span> class in Listing 21.1.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<table border=1 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;
+ border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width=593 valign=top style='width:355.5pt;border:solid windowtext .5pt;
+  background:black;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=codelisting>Listing 21.1 Sample class illustrating the influence of
+  Classloaders</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=593 valign=top style='width:355.5pt;border:solid windowtext .5pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>public
+  class Person<span style="mso-spacerun: yes">  </span>{<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">  </span>private String firstName;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">  </span>private String lastName;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">  </span>public boolean equals(Object obj) {<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">    </span>boolean returnValue = false;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">    </span>if (obj.getClass().equals(Person.class))
+  {<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">      </span>Person person = (Person) obj;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">      </span><o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">      </span>if
+  (person.getFirstName().equals(this.firstName) &amp;&amp;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">         
+  </span>person.getLastName().equals(this.lastName) )<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">      </span>{<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">        </span>returnValue = true;<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">      </span>}<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">    </span>}<span style="mso-spacerun: yes"> 
+  </span><o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">    </span>return returnValue;<span
+  style="mso-spacerun: yes">        </span><o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'><span
+  style="mso-spacerun: yes">  </span>}<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>}</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>Let us suppose that you have bundled the <span style='font-size:
+10.0pt;font-family:Courier'>Person</span> class in both the EJB-JAR and also
+the WAR. The EJB-JAR contains an EJB – <span style='font-size:10.0pt;
+font-family:Courier'>MyEJB</span>. <span style='font-size:10.0pt;font-family:
+Courier'>MyEJB</span> loads this class and initializes the <span
+style='font-size:10.0pt;font-family:Courier'>Person</span>’s <span
+style='font-size:10.0pt;font-family:Courier'>firstName</span> and <span
+style='font-size:10.0pt;font-family:Courier'>lastName</span> to be “John” and
+“Doe” respectively. The web application also does the same initialization. At
+some point the Person loaded by web application is passed into the EJB. A
+comparison occurs when the <span style='font-size:10.0pt;font-family:Courier'>equals()</span>
+is invoked and Yikes!, you get a <span style='font-size:10.0pt;font-family:
+Courier'>ClassCastException</span>. And you thought both the <span
+style='font-size:10.0pt;font-family:Courier'>Person</span> objects are equal
+and the <span style='font-size:10.0pt;font-family:Courier'>equals()</span>
+method would return true. </p>
+
+<p class=body>Consider a slightly different situation. Now bundle the <span
+style='font-size:10.0pt;font-family:Courier'>Person</span> class only in the
+WAR. The EJB-JAR contains the same EJB – <span style='font-size:10.0pt;
+font-family:Courier'>MyEJB</span>. It has a method <span style='font-size:10.0pt;
+font-family:Courier'>foo()</span> on its public interface that has <span
+style='font-size:10.0pt;font-family:Courier'>Person</span> as an argument. Also
+assume that you have bundled the home and remote interface for <span
+style='font-size:10.0pt;font-family:Courier'>MyEJB</span> with the WAR. Now, as
+soon as the web application invokes <span style='font-size:10.0pt;font-family:
+Courier'>foo()</span> on <span style='font-size:10.0pt;font-family:Courier'>MyEJB</span>,
+you get a <span style='font-size:10.0pt;font-family:Courier'>NoClassDefFoundError</span>
+in the <span style='font-size:10.0pt;font-family:Courier'>MyEJB</span><b><sup>1</sup></b>.
+Now bundle the <span style='font-size:10.0pt;font-family:Courier'>Person</span>
+class in the EJB-JAR and repeat the process. Now you get a <span
+style='font-size:10.0pt;font-family:Courier'>NoClassDefFoundError</span> in the
+web application<b><sup>2</sup></b>.</p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body0><b><sup><span style='font-family:"AGaramond Bold"'>1</span></sup></b>
+You get this <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:
+line'>NoClassDefFoundError</span> because WAR classloader loads the <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>Person</span>
+and the EJB classloader – its parent, cannot see this class. Section 21.2
+explains this in more detail</p>
+
+<p class=body0><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body0><b><sup><span style='font-family:"AGaramond Bold"'>2</span></sup></b>
+You get this <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:
+line'>NoClassDefFoundError</span> because even though EJB classloader - which
+is a parent of WAR classloader, loads the <span style='font-size:10.0pt;
+font-family:Courier'>Person</span> class, the <i>MANIFEST.MF</i> file from the
+WAR does not have an entry for the EJB-JAR. You can solve this problem by
+removing the Home and Remote interfaces from the WAR and adding the EJB-JAR as
+a classpath entry in the <i>MANIFEST.MF</i> file. Section 21.2 explains this in
+more detail.</p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>Puzzling isn’t it? Both mechanisms of packaging the <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>Person</span>
+have failed. The key thing to remember is that EJB and the web applications
+have different classloaders. Two objects loaded by different classloaders are
+never equal even if they carry the same values. Further more, a class is
+identified uniquely in the context of the associated classloader. By the above
+definition, if two different classloaders load the same class within their
+scope, they are treated as two different classes. Hence we get the <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>ClassCastException</span>
+in the first scenario. This also applies to singletons too.<span
+style="mso-spacerun: yes">  </span>If you have implemented a class as a
+singleton, you will find that each classloader has its own singleton. </p>
+
+<p class=body>Fair enough. What about the second scenario? This is slightly
+complicated and requires understanding of classloader hierarchies in J2EE. We
+will cover J2EE classloader hierarchy in Section 2.3. But to understand that
+and all that is to come, an in-depth knowledge of classloader basics is
+essential.</p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=head1>21.2 Three principles of Classloader operation<!--[if supportFields]><span
+style='mso-element:field-begin'></span> XE &quot;Model 1 Architecture&quot; <![endif]--><!--[if supportFields]><span
+style='mso-element:field-end'></span><![endif]--></p>
+
+<p class=body1>Classloader problems, when they occur are difficult to debug.
+Good news: There are only three basic principles to understand. If you clearly
+understand all of the three, you can resolve any classloader problem. Now that
+I have your attention, let us move on.</p>
+
+<p class=body><!--[if gte vml 1]><v:shape id="_x0000_s1467" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:0;margin-top:2.5pt;
+ width:195pt;height:3in;z-index:4;mso-position-horizontal:center'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image007.png" o:title="Figure 11"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=0 height=4></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=260 height=288
+  src="./Ch21-ClassLoaders_and_J2EE_files/image008.jpg" v:shapes="_x0000_s1467"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.1 Classloader hierarchy illustrating the delegation</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>The first principle is <b><i>Delegation Principle</i></b>.
+According to this principle, if a particular class is not loaded already, the
+classloaders delegate the requests to load that class to their parent classloaders.
+This delegation continues until the top of the hierarchy is reached and the
+primordial classloader loads the class. Figure 21.1 shows this scenario. The
+System-ClassPath classloader loads a class called <span style='font-size:10.0pt;
+font-family:Courier;layout-grid-mode:line'>MyApp</span>. <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>MyApp</span>
+creates a new instance of <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>java.util.Vector</span>. Assume that <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>java.util.Vector</span>
+has not been loaded already. Since System-Classpath classloader loaded the <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>MyApp</span>
+class, it first asks its parent, the extension classloader to load the class.
+The extension classloader asks the Bootstrap classloader to load <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>java.util.Vector</span>.
+Since <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>java.util.Vector</span>
+is a J2SE class, the bootstrap classloader loads it and returns.</p>
+
+<p class=body>Consider a slightly different scenario in Figure 21.2. In this
+case, <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>MyApp</span>
+creates a new instance of <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>MyClass</span>, another application specific class.
+Assume that <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:
+line'>MyClass</span> has not been loaded yet. As usual, when the
+System-Classpath classloader receives the request to load the class, it
+delegates it to its parent. The request finally reaches the Bootstrap
+classloader. It cannot find the class. Hence its child, Extensions classloader
+tries to load it. It cannot find it either. Finally the request comes back to
+the System-Classpath classloader. It finds the class and loads it. This
+explains the alternative path when everything is not a happy day scenario.</p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><!--[if gte vml 1]><v:shape id="_x0000_s1468" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:69.7pt;
+ margin-top:4.15pt;width:220.55pt;height:240.05pt;z-index:5'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image009.png" o:title="Figure 11_2"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=93 height=6></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=294 height=320
+  src="./Ch21-ClassLoaders_and_J2EE_files/image010.jpg" v:shapes="_x0000_s1468"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body1><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.2 Classloader hierarchy illustrating the delegation
+when classes cannot be found</p>
+
+<p class=body1><!--[if gte vml 1]><v:shape id="_x0000_s1469" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:59.75pt;
+ margin-top:12.9pt;width:240.35pt;height:267pt;z-index:6'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image011.png" o:title="Drawing11_3"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=80 height=17></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=320 height=356
+  src="./Ch21-ClassLoaders_and_J2EE_files/image012.jpg" v:shapes="_x0000_s1469"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.3 Classloader hierarchy<span style="mso-spacerun:
+yes">  </span>and<span style="mso-spacerun: yes">  </span>classes visibility</p>
+
+<p class=body>The second principle is the <b><i>Visibility principle</i></b>.
+According to this principle, Classes loaded by parent classloaders are visible
+to child classloaders but not vice versa. What this means is that a class can
+only see other classes loaded by the <span style='font-size:10.0pt;font-family:
+Courier;layout-grid-mode:line'>ClassX</span>’s classloader or one of its
+parents. The reverse is not true i.e. a class loaded by <span style='font-size:
+10.0pt;font-family:Courier;layout-grid-mode:line'>ClassX</span>’s parent
+classloader cannot see <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>ClassX</span>. An example will make things clearer. Look
+at Figure 2.3.<span style="mso-spacerun: yes">  </span>Four classloaders are
+shown- ClassLoaders A, B, X and Y. Class A is the topmost Classloader.
+ClassLoader B is its child. ClassLoaders X and Y are B’s siblings. Each of them
+loads classes with same names i.e. A, B, X and Y. A is the only class visible
+as far as other classes loaded by ClassLoader A are concerned. As far as
+classes loaded by ClassLoader B is concerned, A and B are the visible classes.
+Similarly for classes loaded by ClassLoader X, classes A, B and X are visible,
+but not class Y. Sibling classloaders cannot see each other’s classes.</p>
+
+<p class=body>The third principle is the class <b><i>Uniqueness Principle</i></b>.
+According to this principle, when a classloader loads a class, the child
+classloaders in the hierarchy will never reload the class. This follows from
+the delegation principle since a classloader always delegates class loading to
+its parents. The child classloader will load it (or try to load it) only if the
+parent hierarchy fails to load the class. Thus the uniqueness of the class is
+maintained. An interesting scenario emerges when both parent and child
+classloaders load the same class. You might think how is this feasible after
+all. Isn’t this contradicting the class uniqueness principle?</p>
+
+<p class=body>To answer this question look at Figure 21.3 again. Let us assume
+that none of the classes have been loaded anywhere in the hierarchy. Let us
+also suppose that <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:
+line'>X</span>, loaded by ClassLoader X, forcefully uses its classloader to
+load <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>B</span>.
+This can be done as shown in Listing 21.2 by using an API such as <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>Class.forName()</span>.
+The code shows such a scenario.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<table border=1 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;
+ border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width=593 valign=top style='width:355.5pt;border:solid windowtext .5pt;
+  background:black;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=codelisting>Listing 21.2 Using Class.forName()</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=593 valign=top style='width:355.5pt;border:solid windowtext .5pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>01
+  public class X {<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>02 <o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>03<span
+  style="mso-spacerun: yes">   </span>public X() {<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>04<span
+  style="mso-spacerun: yes">      </span>ClassLoader cl = this.getClass().getClassLoader();<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>05<span
+  style="mso-spacerun: yes">      </span>Class B = Class.forName(“B”, true,
+  cl);<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>06<span
+  style="mso-spacerun: yes">   </span>}<o:p></o:p></span></p>
+  <p class=code><span style='font-size:9.0pt;mso-bidi-font-size:10.0pt'>07 }</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>In the constructor for <span style='font-size:10.0pt;font-family:
+Courier;layout-grid-mode:line'>X</span>, the class <span style='font-size:10.0pt;
+font-family:Courier;layout-grid-mode:line'>B</span> is loaded by explicitly
+using <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>Person</span>’s
+parent classloader, i.e. the parent of the classloader that loaded <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>Person</span>.
+By doing so, the delegation is overridden and <span style='font-size:10.0pt;
+font-family:Courier;layout-grid-mode:line'>B </span>is loaded by ClassLoaderX –
+the classloader of <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>X</span>. Now suppose that another class loaded by
+ClassLoader B tries to access <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>B</span>, it cannot find it and hence follows the
+delegation principle. Since the delegation principle only consults the parents,
+ClassLoader B also eventually loads Class B. When some other code tries to
+compare two objects of type <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>B</span> - each loaded by different classloaders, it
+gets a <span style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>ClassCastException</span>.
+In fact this is the reason why <span style='font-size:10.0pt;font-family:Courier;
+layout-grid-mode:line'>ClassCastException</span> was thrown in the first
+example in Section 21.1.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<table border=1 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;
+ border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width=600 valign=top style='width:5.0in;border:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=body style='text-indent:0in'><b style='mso-bidi-font-weight:normal'><i
+  style='mso-bidi-font-style:normal'>Delegation Principle: </i></b><span
+  style='mso-bidi-font-weight:bold;mso-bidi-font-style:italic'>If a class is
+  not loaded already, the classloaders delegate the request to load that class
+  to their parent classloaders.</span><b style='mso-bidi-font-weight:normal'><i
+  style='mso-bidi-font-style:normal'><o:p></o:p></i></b></p>
+  <p class=body style='text-indent:0in'><b style='mso-bidi-font-weight:normal'><i
+  style='mso-bidi-font-style:normal'>Visibility Principle: </i></b><span
+  style='mso-bidi-font-weight:bold;mso-bidi-font-style:italic'>Classes loaded
+  by parent classloaders are visible to child classloaders but not vice versa.<o:p></o:p></span></p>
+  <p class=body style='text-indent:0in'><b style='mso-bidi-font-weight:normal'><i
+  style='mso-bidi-font-style:normal'>Uniqueness Principle: </i></b><span
+  style='mso-bidi-font-weight:bold;mso-bidi-font-style:italic'>When a
+  classloader loads a class, the child classloaders in the hierarchy will never
+  reload that class.</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>These three principles are key to untangling and debugging any
+classloader issues you will ever face. Till now we described classloader
+hierarchy using arbitrary names. In the next section you will see that such
+classloader hierarchy is very real in J2EE applications. Most of the
+application code should never explicitly reference classloaders. It is in fact
+a bad thing. It is mostly the framework code that might want to explicitly use
+classloaders once in a while. However every developer and architect should
+understand the classloader hierarchy to write elegantly packaged code.</p>
+
+<p class=head1>21.3 J2EE classloader hierarchy and its implications <!--[if supportFields]><span
+style='mso-element:field-begin'></span><span style="mso-spacerun:
+yes"> </span>XE &quot;Model 1 Architecture&quot; <![endif]--><!--[if supportFields]><span
+style='mso-element:field-end'></span><![endif]--></p>
+
+<p class=body1>In J2EE, each application is packaged as an Enterprise ARchive
+(EAR). The EAR is a self-contained deployment unit having minimal dependencies
+on external classes (with the exception of application server classes).<span
+style="mso-spacerun: yes">  </span>Each EAR gets its own classloader. Packaging
+and deploying classes and resources as EAR make the software evolution
+non-intrusive.</p>
+
+<p class=head2>Structure of an EAR</p>
+
+<p class=body>An EAR file is composed of any number of following components.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=numlist style='mso-list:l13 level1 lfo179'><![if !supportLists]>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>EJB-JAR
+– Each EJB-JAR can contain one or more EJBs</p>
+
+<p class=numlist style='mso-list:l13 level1 lfo179'><![if !supportLists]>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>WAR
+– Each WAR contains exactly one web application.</p>
+
+<p class=numlist style='mso-list:l13 level1 lfo179'><![if !supportLists]>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>RAR
+– Resource Adapter Archive implementing Java Connector Architecture (JCA).</p>
+
+<p class=numlist style='mso-list:l13 level1 lfo179'><![if !supportLists]>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>Dependency
+JAR – Normal JAR file containing classes that are shared between web and ejb application.
+It can also be a third party library used by both web and ejb application.</p>
+
+<p class=numlist style='mso-list:l13 level1 lfo179'><![if !supportLists]>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]><i>application.xml</i>
+– XML file describing the contents of the EAR.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>More information on the structure of the EAR, WAR and EJB-JAR can
+be obtained from the J2EE specification. Figure 2.4 shows a sample EAR. The
+EAR, named <i>sample.ear</i> contains the following artifacts.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=numlist style='mso-list:l75 level1 lfo180'><![if !supportLists]>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>Two
+dependency libraries <i style='mso-bidi-font-style:normal'>util-a.jar</i> and <i
+style='mso-bidi-font-style:normal'>util-b.jar</i>. </p>
+
+<p class=numlist style='mso-list:l75 level1 lfo180'><![if !supportLists]>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>Two
+EJB-JARs <i style='mso-bidi-font-style:normal'>loanejb.jar</i> and <i
+style='mso-bidi-font-style:normal'>personejb.jar</i></p>
+
+<p class=numlist style='mso-list:l75 level1 lfo180'><![if !supportLists]>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><![endif]>A
+WAR named <i style='mso-bidi-font-style:normal'>sampleweb.war</i></p>
+
+<p class=numlist style='mso-list:l75 level1 lfo180'><![if !supportLists]><span
+style='mso-bidi-font-style:italic'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><![endif]><span style='mso-bidi-font-style:italic'>application.xml
+<o:p></o:p></span></p>
+
+<p class=body>As we go along in this chapter, we will explain the individual
+classloaders that load these artifacts.</p>
+
+<p class=body><!--[if gte vml 1]><v:shape id="_x0000_s1470" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:36.95pt;
+ margin-top:10.05pt;width:285.95pt;height:166.9pt;z-index:7'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image013.jpg" o:title="Figure11"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=49 height=13></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=382 height=223
+  src="./Ch21-ClassLoaders_and_J2EE_files/image014.jpg" v:shapes="_x0000_s1470"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.4 Sample EAR structure</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body>The software that you develop typically depends on several third
+party libraries over which you do not have control. Suppose that a certain
+third party library such as Log4J is in version 1.0.2 when you deployed your
+first J2EE application into production. Time flies and you are ready to deploy
+your second application that uses Log4J version 1.2.8 and is heavily dependent
+on certain features in Log4J 1.2.8.<span style="mso-spacerun: yes">  </span>By
+using the EAR approach for deployment, you have ensured that the older
+application can continue to use the older Log4J classes, while newer
+application can take advantage of the latest features in Log4J. In other words
+you have created a sandbox for your application in the shared application
+server environment.</p>
+
+<p class=head2>J2EE classloader hierarchy</p>
+
+<p class=body>J2EE specifies that a hierarchy of classloaders is needed to
+achieve the isolation between applications, but leaves it to the vendors to
+define the exact structure. However to comply with the J2EE specification, most
+vendors have classloaders for each of the J2EE application components depending
+on its location. Further, these classloaders have a hierarchy among themselves,
+i.e. they have a parent-child relationship. Figure 2.5 shows a sample hierarchy
+of classloaders. Note that each application server’s classloader hierarchy
+might slightly differ. Application server vendors sometimes tend to treat two
+or more of these classloaders as one. For instance, a certain application
+server might treat Application classloader and EJB classloader to be the same.
+But the general concepts behind the hierarchy remain the same. </p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><!--[if gte vml 1]><v:shape id="_x0000_s1471" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:4.65pt;
+ margin-top:1.75pt;width:350.5pt;height:213.3pt;z-index:8'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image015.png" o:title="sst"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=6 height=3></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=468 height=284
+  src="./Ch21-ClassLoaders_and_J2EE_files/image016.jpg" v:shapes="_x0000_s1471"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body style='text-indent:0in'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.5 Sample Classloader Hierarchy in J2EE Application
+Servers.</p>
+
+<p class=body>Standard UML notations are used to show the parent child
+relationship among the classloaders in Figure 21.5. The extensions classloader
+is a child of the bootstrap classloader. The system classpath classloader
+extends the JDK extensions classloader. The system classpath classloader loads
+the classes from the classpath of the JVM. Application-specific classloaders
+are children of the system classpath classloader. Since each Child classloaders
+implicitly have visibility to the classes loaded by System-Classpath
+Classloader or its parents. When the parent classloader is below the
+System-Classpath Classloader in hierarchy, the child classloader can “see” the
+class only when it is specified in the manifest file for the child classloader.
+For instance, if an EJB application wants to reference <i>util-a.jar</i> and <i>util-b.jar</i>,
+then we can add the following entry into the EJB-JAR’s manifest file, <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>MANIFEST.MF</span>.</p>
+
+<p class=code align=center style='text-align:center'><span style='font-size:
+9.0pt;mso-bidi-font-size:10.0pt'>Class-Path: util-a.jar util-b.jar<o:p></o:p></span></p>
+
+<p class=body>The <i>util-a.jar</i> and <i>util-b.jar</i> are located within
+the same EAR containing the EJB-JAR. The EAR classloader loads them, but they
+become visible to the EJB classloader (a child of EAR classloader), when the
+EJB-JAR references these jars in its manifest file.</p>
+
+<p class=body>Let us go back to Figure 21.5 again. Bootstrap classloader is the
+primordial classloader for all applications. This is the classloader that loads
+standard J2SE classes. The Extensions classloader is used to load the classes
+under <i>jre/lib/ext</i> directory. These classes are not part of the core Java
+platform but extend it in some way. </p>
+
+<p class=body>This is followed by the System-Classpath classloader, which loads
+the classes in the CLASSPATH or as specified by the command line switch <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>–classpath</span>.
+This is the classloader that loads all the application server classes and
+libraries. A class specified during the application server startup is then
+available to all applications underneath no matter what. Hence it is very
+tempting to load the J2EE application class files from this location when a <span
+style='font-size:10.0pt;font-family:Courier;layout-grid-mode:line'>NoClassDefFoundError</span>
+is encountered. In fact that solves the problem (temporarily at least) and is
+exactly the reason why many developers new to J2EE make the mistake of
+specifying the classes here. By putting the classes here, they are also visible
+to every J2EE application running on the application server. Normally this is a
+very bad thing to do. Unless there is a compelling reason to do so you should
+avoid this approach. Such compelling reasons include you being a service
+provider for the application server – for instance, if you are providing the
+CMP framework implementation, which will be used by the application server,
+then your classes have to go in here so that your classes are visible to the
+application server classes (Recall the first principle specified above).</p>
+
+<p class=body>The next in hierarchy is the EAR classloader. Every J2EE EAR gets
+its own classloader. This is the starting point for isolating application
+classes from one another. This classloader loads all the dependency libraries
+in the EAR. Dependency libraries are generally those classes common between the
+web and EJB application. For instance, an application exception thrown from EJB
+module has to be caught in the web module. The throws clause in the EJB module
+and the catch clause in the web module have to refer to the same class loaded
+by the same classloader at run time. Similarly a Value Object [Core J2EE
+Patterns – Deepak Alur et al] By applying the first principle of classloaders,
+both EJB and the web module can see the class loaded by the EAR classloader,
+since it is their common parent. By applying the second principle, since the
+exception class is already loaded by the parent classloader and is visible to
+the child classloader, it will not be reloaded. </p>
+
+<p class=body>Usually all the jars in an EAR are dependency libraries. An
+interesting question arises. Aren’t EJBs packaged as jars? How does the
+application server know to load the EJBs in a separate classloader? The simple
+answer is that it doesn’t, unless you tell it so. You have to explicitly
+specify which of the jars are EJB modules in <i>application.xml</i> – the
+deployment descriptor for the EAR. The two dependency libraries from the
+sample.ear – util-a.jar and util-b.jar are loaded by EAR classloader.</p>
+
+<p class=body>WAR classloaders are the siblings of EJB classloader. The key
+difference between these classloaders is that while all EJB modules whether in
+the single or different EJB-JARs, share the same EJB classloader, each WAR gets
+its own classloader. All of the WAR classloaders however inherit from the same
+parent viz. EJB classloader. The rationale behind this hierarchy is that EJBs
+contain the core of the business logic and web applications have to “see” them
+to invoke their business methods. Of course to “see” them the WAR manifest file
+has to have an entry as shown earlier. In the sample.ear, the <i>loanejb.jar</i>
+and <i>personejb.jar</i> are loaded by the EJB classloader, while the <i>sampleweb.war</i>
+is loaded by the WAR classloader.</p>
+
+<p class=body>An important rule of thumb is that classes should be no higher in
+the hierarchy than they are supposed to exist. When you put the classes at a
+level higher than where it is supposed to reside, you are introducing an
+avalanche of classes moving to the higher level. Consider the class dependency
+shown in Figure 21.6. At runtime, Class A depends on B, which in turn depends
+on C. Le t us suppose that all of these classes reside in the WAR classloader.
+If, for some reason, Class A is moved into EJB-JAR, but the rest of them are
+left in the WAR, Class A gets loaded by the EJB classloader. At runtime, when
+the Class A is loaded, it looks for all dependent classes (Class B, in this
+case). It cannot find Class B since Class B is loaded by the child classloader.
+To prevent this problem you are forced to move Class B into EJB-JAR, which in
+turn forces to move Class C into EJB-JAR. Consequently the entire class
+dependency graph has to be moved into EJB-JAR.<span style="mso-spacerun: yes"> 
+</span>The solution to this problem is application partitioning (Refer to
+Chapter 25 on Deployment Considerations).</p>
+
+<p class=body><!--[if gte vml 1]><v:shape id="_x0000_s1472" type="#_x0000_t75"
+ style='position:absolute;left:0;text-align:left;margin-left:0;margin-top:11.55pt;
+ width:353.95pt;height:28.5pt;z-index:9;mso-position-horizontal:center'>
+ <v:imagedata src="./Ch21-ClassLoaders_and_J2EE_files/image017.png" o:title="Figure11"/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=0 height=15></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=472 height=38
+  src="./Ch21-ClassLoaders_and_J2EE_files/image018.jpg" v:shapes="_x0000_s1472"></td>
+ </tr>
+</table>
+
+</span><![endif]><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=body><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=figure>Figure 21.6 Runtime class dependency.</p>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<table border=1 cellspacing=0 cellpadding=0 style='margin-left:5.4pt;
+ border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-padding-alt:0in 5.4pt 0in 5.4pt'>
+ <tr>
+  <td width=600 valign=top style='width:5.0in;border:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=body style='text-indent:0in'><span style='mso-bidi-font-style:italic'>Classes
+  should be no higher in the hierarchy than they are supposed to exist. When
+  you put the classes at a level higher than where it is supposed to reside,
+  you are introducing an avalanche of classes moving to the higher level.</span></p>
+  </td>
+ </tr>
+</table>
+
+<p class=codeNOTATION><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=head1>21.4 Summary <!--[if supportFields]><span style='mso-element:
+field-begin'></span><span style="mso-spacerun: yes"> </span>XE &quot;Model 1
+Architecture&quot; <![endif]--><!--[if supportFields]><span style='mso-element:
+field-end'></span><![endif]--></p>
+
+<p class=body>In this chapter you gained an in-depth knowledge about classloaders.
+You also understood the three key principles in classloader operation. You
+looked into the hierarchy in J2EE classloaders and its variants. You also
+understood which artifacts are loaded by which classloaders. This information
+is critical while packaging your application into EARs, WARs and JARs. This
+knowledge, when applied during design time results in applications that are
+better “partitioned” – which we will deal in the next chapter.</p>
+
+</div>
+
+</body>
+
+</html>
